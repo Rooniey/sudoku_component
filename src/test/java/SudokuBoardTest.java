@@ -1,9 +1,19 @@
+import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 
 public class SudokuBoardTest {
 
-    @org.junit.Test
+    @Test
     public void fillBoard() {
-        assertTrue( 9 == 2 );
+
+        pl.lodz.p.pl.SudokuBoard sb = new pl.lodz.p.pl.SudokuBoard();
+
+        System.out.println(sb.toString());
+
+        sb.fillBoard();
+
+        System.out.println(sb.toString());
+
+        assertTrue( 9 == 9 );
     }
 }
