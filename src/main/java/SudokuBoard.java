@@ -6,38 +6,30 @@ import java.util.List;
 
 public class SudokuBoard {
 
-    private static final int rowLen = 9;
+    private static final int rowLen = 9;    //length of the sudoku board
+    private static final int boxLen = 3;    //length of a side of small boxes (that sudoku is built upon)
 
     private int[][] board;
 
     public SudokuBoard() {
-        board = new int[9][9];
+        board = new int[rowLen][rowLen];
     }
 
     public void fillBoard() {
-
         if (isFilled()) {
             return;
         } else {
-            //find the first empty cell
-            int x = -1;
-            int y = -1;
-            for (int i = 0; i < board.length && x < 0; i++) {
-                for (int j = 0; j < board[0].length; j++) {
-                    if (board[i][j] == 0) {
-                        x = i;
-                        y = j;
-                        break;
-                    }
-                }
-            }
+            //find the next empty cell
+            int[] emptyCell = findNextEmptyCell();
+            int x = emptyCell[0];
+            int y = emptyCell[1];
 
+            //select possible values in found empty cell and shuffle them
             List<Integer> possibilities = possibleEntries(x, y);
             Collections.shuffle(possibilities);
 
-            for (int i = 0; i < possibilities.size(); i++) {
-
-                board[x][y] = possibilities.get(i);
+            for (Integer possibility : possibilities) {
+                board[x][y] = possibility;
                 fillBoard();
                 if (isFilled()) {
                     return;
@@ -47,9 +39,17 @@ public class SudokuBoard {
         }
     }
 
+    public void resetBoard() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                board[i][j] = 0;
+            }
+        }
+    }
+
     private boolean isFilled() {
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
+            for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 0) {
                     return false;
                 }
@@ -58,32 +58,48 @@ public class SudokuBoard {
         return true;
     }
 
+    private int[] findNextEmptyCell() {
+        int[] emptyCell = new int[2];
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 0) {
+                    emptyCell[0] = i;
+                    emptyCell[1] = j;
+                }
+            }
+        }
+
+        return emptyCell;
+    }
+
+
     private List<Integer> possibleEntries(int row, int col) {
-        List<Integer> possibilities = new ArrayList<Integer>();
-        for (int i = 1; i < 10; i++) {
+        List<Integer> possibilities = new ArrayList<>();
+        for (int i = 1; i < rowLen + 1; i++) {
             possibilities.add(i);
         }
 
         //check row
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < rowLen; i++) {
             if (board[row][i] != 0) {
                 possibilities.remove(Integer.valueOf(board[row][i]));
             }
         }
 
         //check col
-        for (int j = 0; j < 9; j++) {
+        for (int j = 0; j < rowLen; j++) {
             if (board[j][col] != 0) {
                 possibilities.remove(Integer.valueOf(board[j][col]));
             }
         }
 
         //check box
-        int leftUpperX = (row / 3) * 3;
-        int leftUpperY = (col / 3) * 3;
+        int leftUpperX = (row / boxLen) * boxLen;
+        int leftUpperY = (col / boxLen) * boxLen;
 
-        for (int i = leftUpperX; i < leftUpperX + 3; i++) {
-            for (int j = leftUpperY; j < leftUpperY + 3; j++) {
+        for (int i = leftUpperX; i < leftUpperX + boxLen; i++) {
+            for (int j = leftUpperY; j < leftUpperY + boxLen; j++) {
                 if (board[i][j] != 0) {
                     possibilities.remove(Integer.valueOf(board[i][j]));
                 }
@@ -99,14 +115,14 @@ public class SudokuBoard {
 
         for (int i = 0; i < rowLen; i++) {
 
-            if (i % 3 == 0) {
+            if (i % boxLen == 0) {
                 boardString.append("------------------------------\n");
             }
 
             boardString.append("|");
 
             for (int j = 0; j < rowLen; j++) {
-                boardString.append(this.board[i][j]).append((j + 1) % 3 == 0 ? " | " : "  ");
+                boardString.append(this.board[i][j]).append((j + 1) % boxLen == 0 ? " | " : "  ");
             }
 
             boardString.append("\n");
@@ -117,6 +133,27 @@ public class SudokuBoard {
 
         return boardString.toString();
     }
+
+    //getBoard returns deepcopy of the board
+    public int[][] getBoard() {
+        int[][] toReturn = new int[rowLen][rowLen];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                toReturn[i][j] = board[i][j];
+            }
+        }
+
+        return toReturn;
+    }
+
+    public static int getRowLen() {
+        return rowLen;
+    }
+
+    public static int getBoxLen() {
+        return boxLen;
+    }
+
 
 
 }
