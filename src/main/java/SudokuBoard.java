@@ -66,6 +66,7 @@ public class SudokuBoard {
                 if (board[i][j] == 0) {
                     emptyCell[0] = i;
                     emptyCell[1] = j;
+                    return emptyCell;
                 }
             }
         }
@@ -145,15 +146,4 @@ public class SudokuBoard {
 
         return toReturn;
     }
-
-    public static int getRowLen() {
-        return rowLen;
-    }
-
-    public static int getBoxLen() {
-        return boxLen;
-    }
-
-
-
 }
