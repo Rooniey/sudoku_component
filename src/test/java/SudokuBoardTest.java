@@ -1,116 +1,72 @@
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.pl.SudokuBoard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SudokuBoardTest {
-
-    private static int rowLen = 9;
-    private static int boxLen = 3;
+class SudokuBoardTest {
 
     private SudokuBoard sb;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         sb = new SudokuBoard();
     }
 
     @Test
-    public void When_FillBoardIsCalled_Expect_BeFilledProperly() {
-        sb.fillBoard();
-        int[][] board = sb.getBoard();
+    public void When_CheckBoardIsCalledOnCorrectSudokuBoard_Expect_ReturnsTrue()
+    {
+        // The correct example of sudoku from Wikipedia
+        int[][] correctSudoku = {
+                {5, 3, 4, 6, 7, 8, 9, 1, 2},
+                {6, 7, 2, 1, 9, 5, 3, 4, 8},
+                {1, 9, 8, 3, 4, 2, 5, 6, 7},
 
-        Assert.assertTrue(checkRows(board));
-        Assert.assertTrue(checkCols(board));
-        Assert.assertTrue(checkBoxes(board));
+                {8, 5, 9, 7, 6, 1, 4, 2, 3},
+                {4, 2, 6, 8, 5, 3, 7, 9, 1},
+                {7, 1, 3, 9, 2, 4, 8, 5, 6},
+
+                {9, 6, 1, 5, 3, 7, 2, 8, 4},
+                {2, 8, 7, 4, 1, 9, 6, 3, 5},
+                {3, 4, 5, 2, 8, 6, 1, 7, 9}
+        };
+
+        settingSudokuBoard(correctSudoku);
+
+        assertTrue(sb.checkBoard());
     }
-
 
     @Test
-    public void When_FillBoardIsCalledTwice_Expect_GeneratesTwoDifferentBoards() {
-        sb.fillBoard();
-        int[][] firstSudoku = sb.getBoard();
+    void When_CheckBoardIsCalledOnIncorrectSudokuBoard_Expect_ReturnsFalse() {
 
-        sb.resetBoard();
+        // The incorrect example of sudoku (modified from Wikipedia)
+        int[][] incorrectSudoku = {
+                {5, 3, 4, 6, 7, 8, 9, 1, 2},
+                {6, 7, 2, 1, 9, 5, 3, 4, 8},
+                {1, 9, 8, 3, 4, 2, 5, 6, 7},
 
-        sb.fillBoard();
-        int[][] secondSudoku = sb.getBoard();
+                {8, 5, 9, 7, 6, 1, 4, 2, 3},
+                {4, 2, 3, 8, 5, 3, 7, 9, 1},
+                {7, 1, 3, 9, 2, 5, 8, 5, 6},
 
-        Assert.assertFalse(Arrays.deepEquals(firstSudoku, secondSudoku));
+                {9, 6, 1, 5, 3, 7, 2, 8, 4},
+                {2, 8, 7, 4, 1, 9, 6, 3, 5},
+                {3, 4, 5, 2, 8, 6, 1, 3, 9}
+        };
 
+        settingSudokuBoard(incorrectSudoku);
+
+        assertFalse(sb.checkBoard());
     }
 
-
-    private boolean checkRows(int[][] board) {
-        List<Integer> possibilities = new ArrayList<Integer>();
-
-        for (int row = 0; row < rowLen; row++) {
-
-            //getSudokuNumbers
-            for (int i = 1; i < rowLen + 1; i++) {
-                possibilities.add(i);
-            }
-
-            for (int i = 0; i < rowLen; i++) {
-                possibilities.remove(Integer.valueOf(board[row][i]));
-            }
-
-            if (!possibilities.isEmpty()) {
-                return false;
+    private void settingSudokuBoard(final int[][] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                sb.set(i,j,arr[i][j]);
             }
         }
-        return true;
-    }
-
-    private boolean checkCols(int[][] board) {
-        List<Integer> possibilities = new ArrayList<Integer>();
-
-        for (int col = 0; col < rowLen; col++) {
-
-            //getSudokuNumbers
-            for (int i = 1; i < rowLen + 1; i++) {
-                possibilities.add(i);
-            }
-
-            for (int i = 0; i < rowLen; i++) {
-                possibilities.remove(Integer.valueOf(board[i][col]));
-            }
-
-            if (!possibilities.isEmpty()) {
-                return false;
-            }
-
-        }
-        return true;
     }
 
 
-    private boolean checkBoxes(int[][] board) {
-        List<Integer> possibilities = new ArrayList<Integer>();
-
-        for (int row = 0; row < rowLen; row += boxLen) {
-            for (int col = 0; col < rowLen; col += boxLen) {
-
-                //getSudokuNumbers
-                for (int i = 1; i < rowLen + 1; i++) {
-                    possibilities.add(i);
-                }
-
-                for (int i = row; i < row + boxLen; i++) {
-                    for (int j = col; j < col + boxLen; j++) {
-                        possibilities.remove(Integer.valueOf(board[i][j]));
-                    }
-                }
-
-                if (!possibilities.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 }
