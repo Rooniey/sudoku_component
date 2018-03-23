@@ -1,7 +1,9 @@
 import pl.lodz.p.pl.SudokuBoard;
+import pl.lodz.p.pl.SudokuField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,12 +34,13 @@ class SudokuSolverTest {
     @Test
     public void When_SolveIsCalledTwice_Expect_GeneratesTwoDifferentBoards() {
         ss.solve(sb);
-        int[][] first = sb.getBoard();
-        sb.resetBoard();
-        ss.solve(sb);
-        int[][] second = sb.getBoard();
+        SudokuField[][] first = sb.getBoard();
 
-        assertFalse(Arrays.deepEquals(first,second));
+        SudokuBoard secondBoard = new SudokuBoard();
+        ss.solve(secondBoard);
+        SudokuField[][] second = secondBoard.getBoard();
+
+        assertFalse(Arrays.deepEquals(first, second));
     }
 
     private boolean checkRows() {

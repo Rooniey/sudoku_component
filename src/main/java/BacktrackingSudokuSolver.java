@@ -43,7 +43,6 @@ public class BacktrackingSudokuSolver implements SudokuSolver {
                 }
             }
         }
-
         return emptyCell;
     }
 
