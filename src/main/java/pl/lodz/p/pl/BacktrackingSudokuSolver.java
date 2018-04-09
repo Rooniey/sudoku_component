@@ -1,5 +1,4 @@
-import pl.lodz.p.pl.SudokuBoard;
-
+package pl.lodz.p.pl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

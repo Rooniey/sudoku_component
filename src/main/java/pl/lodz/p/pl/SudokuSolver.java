@@ -1,4 +1,4 @@
-import pl.lodz.p.pl.SudokuBoard;
+package pl.lodz.p.pl;
 
 public interface SudokuSolver {
 

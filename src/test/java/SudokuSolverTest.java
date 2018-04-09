@@ -1,5 +1,4 @@
-import pl.lodz.p.pl.SudokuBoard;
-import pl.lodz.p.pl.SudokuField;
+import pl.lodz.p.pl.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,13 +33,13 @@ class SudokuSolverTest {
     @Test
     public void When_SolveIsCalledTwice_Expect_GeneratesTwoDifferentBoards() {
         ss.solve(sb);
-        SudokuField[][] first = sb.getBoard();
+        List<SudokuField> first = sb.getBoard();
 
         SudokuBoard secondBoard = new SudokuBoard();
         ss.solve(secondBoard);
-        SudokuField[][] second = secondBoard.getBoard();
+        List<SudokuField> second = secondBoard.getBoard();
 
-        assertFalse(Arrays.deepEquals(first, second));
+        assertFalse(first.equals(second));
     }
 
     private boolean checkRows() {

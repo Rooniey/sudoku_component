@@ -1,45 +1,43 @@
 package pl.lodz.p.pl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//import pl.lodz.p.pl.SudokuField; //MAVEN COMMENT
-//import pl.lodz.p.pl.SudokuSegment; //MAVEN COMMENT
 
 public class SudokuBoard {
 
     public static final int RowLen = 9;    //length of the sudoku board
     public static final int BoxLen = 3;    //length of a side of small boxes (that sudoku is built upon)
 
-    private SudokuField[][] board = new SudokuField[RowLen][RowLen];
-
-//    private int[][] board;
+    private List<SudokuField> board;
 
     public SudokuBoard() {
+        board = Arrays.asList(new SudokuField[RowLen * RowLen]);
         for (int i = 0; i < RowLen; i++) {
             for (int j = 0; j < RowLen; j++) {
-                board[i][j] = new SudokuField();
+                board.set(i * RowLen + j, new SudokuField());
             }
         }
     }
 
     public int get(int x, int y) {
-        return board[x][y].getFieldValue();
+        return board.get(x * RowLen + y).getFieldValue();
     }
 
     public void set(int x, int y, int value) {
-        board[x][y].setFieldValue(value);
+        board.get(x * RowLen + y).setFieldValue(value);
     }
 
     //probably useless now
-    public void resetBoard() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j].setFieldValue(0);
-            }
-        }
-    }
+//    public void resetBoard() {
+//        for (int i = 0; i < board.length; i++) {
+//            for (int j = 0; j < board[i].length; j++) {
+//                board[i][j].setFieldValue(0);
+//            }
+//        }
+//    }
 
     public boolean isFilled() {
         //iterates from the last cell, because it is optimal for the most popular sudoku solver algorithm
@@ -55,14 +53,15 @@ public class SudokuBoard {
 
     public SudokuSegment getRow(int y) {
 
-        return new SudokuSegment(Arrays.asList(board[y]).subList(0, RowLen));
+        return new SudokuSegment(board.subList(y * 9, (y + 1) * 9));
     }
 
     public SudokuSegment getColumn(int x) {
+
         ArrayList<SudokuField> col = new ArrayList<SudokuField>();
 
         for (int i = 0; i < RowLen; i++) {
-            col.add(board[i][x]);
+            col.add(board.get(i * RowLen + x));
         }
         return new SudokuSegment(col);
     }
@@ -73,9 +72,14 @@ public class SudokuBoard {
 
         ArrayList<SudokuField> box = new ArrayList<SudokuField>();
 
-        for (int i = firstY; i < firstY + 3; i++) {
-            box.addAll(Arrays.asList(board[i]).subList(firstX, firstX + 3));
+        for (int i = 0; i < BoxLen; i++) {
+            for (int j = 0; j < BoxLen; j++) {
+                box.add(board.get((firstX + i) * RowLen + firstY + j));
+            }
         }
+//        for (int i = firstY; i < firstY + 3; i++) {
+//            box.addAll(Arrays.asList(board[i]).subList(firstX, firstX + 3));
+//        }
         return new SudokuSegment(box);
     }
 
@@ -92,7 +96,7 @@ public class SudokuBoard {
             boardString.append("|");
 
             for (int j = 0; j < RowLen; j++) {
-                boardString.append(this.board[i][j].getFieldValue()).append((j + 1) % BoxLen == 0 ? " | " : "  ");
+                boardString.append(board.get(i * RowLen + j).getFieldValue()).append((j + 1) % BoxLen == 0 ? " | " : "  ");
             }
 
             boardString.append("\n");
@@ -105,13 +109,13 @@ public class SudokuBoard {
     }
 
     //getBoard returns deepcopy of the board
-    public SudokuField[][] getBoard() {
-        SudokuField[][] toReturn = new SudokuField[RowLen][RowLen];
+    public List<SudokuField> getBoard() {
+        List<SudokuField> toReturn = Arrays.asList(new SudokuField[RowLen * RowLen]);
 
         for (int i = 0; i < RowLen; i++) {
 //            toReturn[i] = board[i].clone();
             for (int j = 0; j < RowLen; j++) {
-                toReturn[i][j] = board[i][j];
+                toReturn.set(i * RowLen + j, board.get(i * RowLen + j));
             }
         }
         return toReturn;
