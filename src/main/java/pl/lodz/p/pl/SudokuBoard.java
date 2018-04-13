@@ -1,10 +1,8 @@
 package pl.lodz.p.pl;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 public class SudokuBoard {
 
@@ -30,15 +28,6 @@ public class SudokuBoard {
         board.get(x * RowLen + y).setFieldValue(value);
     }
 
-    //probably useless now
-//    public void resetBoard() {
-//        for (int i = 0; i < board.length; i++) {
-//            for (int j = 0; j < board[i].length; j++) {
-//                board[i][j].setFieldValue(0);
-//            }
-//        }
-//    }
-
     public boolean isFilled() {
         //iterates from the last cell, because it is optimal for the most popular sudoku solver algorithm
         for (int i = RowLen - 1; i >= 0; i--) {
@@ -53,7 +42,12 @@ public class SudokuBoard {
 
     public SudokuSegment getRow(int y) {
 
-        return new SudokuSegment(board.subList(y * 9, (y + 1) * 9));
+        ArrayList<SudokuField> row = new ArrayList<SudokuField>();
+
+        for (int i = 0; i < RowLen; i++) {
+            row.add(new SudokuField(get(y, i)));
+        }
+        return new SudokuSegment(row);
     }
 
     public SudokuSegment getColumn(int x) {
@@ -61,11 +55,12 @@ public class SudokuBoard {
         ArrayList<SudokuField> col = new ArrayList<SudokuField>();
 
         for (int i = 0; i < RowLen; i++) {
-            col.add(board.get(i * RowLen + x));
+            col.add(new SudokuField(get(i, x)));
         }
         return new SudokuSegment(col);
     }
 
+    //return 3x3 boxex with copies of sudokufields
     public SudokuSegment getBox(int x, int y) {
         int firstX = (x / 3) * 3;
         int firstY = (y / 3) * 3;
@@ -74,12 +69,10 @@ public class SudokuBoard {
 
         for (int i = 0; i < BoxLen; i++) {
             for (int j = 0; j < BoxLen; j++) {
-                box.add(board.get((firstX + i) * RowLen + firstY + j));
+                box.add(new SudokuField(get(firstX + i, firstY + j)));
             }
         }
-//        for (int i = firstY; i < firstY + 3; i++) {
-//            box.addAll(Arrays.asList(board[i]).subList(firstX, firstX + 3));
-//        }
+
         return new SudokuSegment(box);
     }
 
@@ -113,9 +106,8 @@ public class SudokuBoard {
         List<SudokuField> toReturn = Arrays.asList(new SudokuField[RowLen * RowLen]);
 
         for (int i = 0; i < RowLen; i++) {
-//            toReturn[i] = board[i].clone();
             for (int j = 0; j < RowLen; j++) {
-                toReturn.set(i * RowLen + j, board.get(i * RowLen + j));
+                toReturn.set(i * RowLen + j, new SudokuField(get(i, j)));
             }
         }
         return toReturn;
