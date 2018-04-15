@@ -129,6 +129,58 @@ class SudokuBoardTest {
 
     }
 
+    @Test
+    void TestSerialization() {
+        int[][] incorrectSudoku = {
+                {4, 2, 5, 6, 7, 8, 9, 1, 2},
+                {6, 7, 2, 1, 9, 5, 3, 4, 8},
+                {1, 9, 8, 3, 4, 2, 5, 6, 7},
+
+                {8, 5, 9, 7, 6, 1, 4, 2, 3},
+                {4, 2, 6, 8, 5, 3, 7, 9, 1},
+                {7, 1, 3, 9, 2, 4, 8, 5, 6},
+
+                {9, 6, 1, 5, 3, 7, 2, 8, 4},
+                {2, 8, 7, 4, 1, 9, 6, 3, 5},
+                {3, 4, 5, 2, 8, 6, 1, 7, 9}
+        };
+
+        settingSudokuBoard(incorrectSudoku);
+
+        SudokuBoard test = new SudokuBoard();
+        test.set(0,1,8);
+
+        String fileName = "BoardFileT.ser";
+
+        try(FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName);
+            FileSudokuBoardDao dao2 = SudokuBoardDaoFactory.getFileDao("BoardFile.ser")) {
+            dao.write(sb);
+            dao2.write(test);
+
+//            SudokuBoard tBoard = dao.read();
+//            SudokuBoard tBoard2 = dao2.read();
+//            String tbs = tBoard.prettyToString();
+//            String tbs2 = tBoard2.prettyToString();
+//            System.out.println(tbs2);
+        } catch (EOFException e) {
+            // ... this is fine
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try(FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao("BoardFileT.ser")) {
+            SudokuBoard tBoard = dao.read();
+            String tbs = tBoard.prettyToString();
+            System.out.println(tbs);
+        } catch (EOFException e) {
+            // ... this is fine
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 
     private void settingSudokuBoard(final int[][] arr) {

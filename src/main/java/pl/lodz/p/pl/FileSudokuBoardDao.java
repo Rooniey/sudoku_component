@@ -9,43 +9,42 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
     private ObjectOutputStream oOut;
     private ObjectInputStream oIn;
 
-    private FileOutputStream fileOut;
-    private FileInputStream fileIn;
 
     public FileSudokuBoardDao(String fileName) throws IOException {
         this.fileName = fileName;
 
-        fileOut = new FileOutputStream(fileName);
-        fileIn = new FileInputStream(fileName);
+//        fileOut = new FileOutputStream(fileName);
+//        fileIn = new FileInputStream(fileName);
 
-        oOut = new ObjectOutputStream(fileOut);
-        oIn = new ObjectInputStream(fileIn);
+//        oOut = new ObjectOutputStream(new FileOutputStream(fileName));
+//        oIn = new ObjectInputStream(new FileInputStream(fileName));
     }
 
     @Override
     public SudokuBoard read() throws IOException, ClassNotFoundException {
-        return (SudokuBoard) oIn.readObject();
+        oIn = new ObjectInputStream(new FileInputStream(fileName));
+        SudokuBoard toRet = (SudokuBoard) oIn.readObject();
+        oIn.close();
+        return toRet;
     }
 
     @Override
     public void write(SudokuBoard obj) throws IOException {
-//        try(FileOutputStream fileOut = new FileOutputStream(fileName);
-//            ObjectOutputStream oOut = new ObjectOutputStream(fileOut)) {
-//
-//        } catch (IOException i) {
-//            i.printStackTrace();
-//        }
+        oOut = new ObjectOutputStream(new FileOutputStream(fileName));
         oOut.writeObject(obj);
         oOut.flush();
-
+        oOut.close();
     }
 
     @Override
     public void close() throws Exception {
-        oOut.close();
-        oIn.close();
-        fileOut.close();
-        fileIn.close();
+        if(oOut != null) {
+            oOut.close();
+        }
+        if(oIn != null) {
+            oIn.close();
+        }
+
     }
 
     @Override
