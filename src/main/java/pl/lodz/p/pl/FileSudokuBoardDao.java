@@ -10,14 +10,8 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
     private ObjectInputStream oIn;
 
 
-    public FileSudokuBoardDao(String fileName) throws IOException {
+    public FileSudokuBoardDao(String fileName) {
         this.fileName = fileName;
-
-//        fileOut = new FileOutputStream(fileName);
-//        fileIn = new FileInputStream(fileName);
-
-//        oOut = new ObjectOutputStream(new FileOutputStream(fileName));
-//        oIn = new ObjectInputStream(new FileInputStream(fileName));
     }
 
     @Override
