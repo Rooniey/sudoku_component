@@ -40,8 +40,12 @@ public class SudokuSegment {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SudokuSegment that = (SudokuSegment) o;
         return Objects.equal(fields, that.fields);
     }

@@ -149,8 +149,12 @@ public class SudokuBoard implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SudokuBoard)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SudokuBoard)) {
+            return false;
+        }
         SudokuBoard that = (SudokuBoard) o;
         return Objects.equal(board, that.board);
     }
