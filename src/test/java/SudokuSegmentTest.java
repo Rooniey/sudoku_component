@@ -54,6 +54,12 @@ public class SudokuSegmentTest {
     }
 
     @Test
+    void When_EqualsIsCalledWithDifferentValues_Expect_ReturnsTrue() {
+        SudokuSegment sf2 = correctBoard.getRow(baseRowValue + 1);
+        assertFalse(sf.equals(sf2));
+    }
+
+    @Test
     void Equals_IsSymmetric() {
 
         SudokuSegment sf3 = correctBoard.getRow(baseRowValue);
