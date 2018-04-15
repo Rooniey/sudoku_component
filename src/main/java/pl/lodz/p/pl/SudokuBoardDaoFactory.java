@@ -1,6 +1,5 @@
 package pl.lodz.p.pl;
 
-import java.io.IOException;
 
 public class SudokuBoardDaoFactory {
 
