@@ -1,13 +1,15 @@
-import pl.lodz.p.pl.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.lodz.p.pl.BacktrackingSudokuSolver;
+import pl.lodz.p.pl.SudokuBoard;
+import pl.lodz.p.pl.SudokuField;
+import pl.lodz.p.pl.SudokuSolver;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SudokuSolverTest {
 

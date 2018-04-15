@@ -1,14 +1,10 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.lodz.p.pl.Dao;
 import pl.lodz.p.pl.FileSudokuBoardDao;
 import pl.lodz.p.pl.SudokuBoard;
 import pl.lodz.p.pl.SudokuBoardDaoFactory;
 
 import java.io.EOFException;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
