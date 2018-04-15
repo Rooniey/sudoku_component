@@ -1,10 +1,14 @@
 package pl.lodz.p.pl;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SudokuBoard {
+public class SudokuBoard implements Serializable {
 
     public static final int RowLen = 9;    //length of the sudoku board
     public static final int BoxLen = 3;    //length of a side of small boxes (that sudoku is built upon)
@@ -19,6 +23,8 @@ public class SudokuBoard {
             }
         }
     }
+
+
 
     public int get(int x, int y) {
         return board.get(x * RowLen + y).getFieldValue();
@@ -76,8 +82,7 @@ public class SudokuBoard {
         return new SudokuSegment(box);
     }
 
-    @Override
-    public String toString() {
+    public String prettyToString() {
         StringBuilder boardString = new StringBuilder();
 
         for (int i = 0; i < RowLen; i++) {
@@ -99,6 +104,14 @@ public class SudokuBoard {
         boardString.append("------------------------------\n");
 
         return boardString.toString();
+    }
+
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("board", board)
+                .toString();
     }
 
     //getBoard returns deepcopy of the board
@@ -132,5 +145,18 @@ public class SudokuBoard {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SudokuBoard)) return false;
+        SudokuBoard that = (SudokuBoard) o;
+        return Objects.equal(board, that.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(board);
     }
 }

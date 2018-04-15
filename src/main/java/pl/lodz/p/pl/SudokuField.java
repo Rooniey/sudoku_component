@@ -1,10 +1,15 @@
 package pl.lodz.p.pl;
 
-import java.util.Objects;
+//import java.util.Objects;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
-public class SudokuField {
+import java.io.Serializable;
+
+public class SudokuField implements Serializable{
 
     private int value;
+
 
     public SudokuField(int value) {
         this.value = value;
@@ -31,11 +36,18 @@ public class SudokuField {
             return false;
         }
         SudokuField that = (SudokuField) o;
-        return value == that.value;
+        return Objects.equal(this.value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hashCode(this.value);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("value", value)
+                .toString();
     }
 }
