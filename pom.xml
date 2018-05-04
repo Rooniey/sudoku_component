@@ -9,6 +9,7 @@
 
   <modules>
     <module>Model</module>
+    <module>View</module>
   </modules>
 
   <dependencyManagement>
