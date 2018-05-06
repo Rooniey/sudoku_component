@@ -6,16 +6,27 @@ import pl.lodz.p.pl.SudokuBoardDaoFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
+
+import org.junit.jupiter.api.AfterEach;
+
 class FileSudokuBoardDaoTest {
 
-    private SudokuBoard correctBoard;
+    private SudokuBoard writtenBoard;
+    private SudokuBoard readBoard;
 
-    private String fileName = "DaoTestBoard.ser";
+    private final String fileName = "DaoTestBoard.ser";
 
     @BeforeEach
     public void setUp() {
-        correctBoard = new SudokuBoard();
-        int[][] correctSudoku = {
+    	readBoard = new SudokuBoard();
+        writtenBoard = new SudokuBoard();
+        int[][] sampleSudoku = {
                 {5, 3, 4, 6, 7, 8, 9, 1, 2},
                 {6, 7, 2, 1, 9, 5, 3, 4, 8},
                 {1, 9, 8, 3, 4, 2, 5, 6, 7},
@@ -28,34 +39,60 @@ class FileSudokuBoardDaoTest {
                 {2, 8, 7, 4, 1, 9, 6, 3, 5},
                 {3, 4, 5, 2, 8, 6, 1, 7, 9}
         };
-        settingSudokuBoard(correctSudoku);
+        settingSudokuBoard(sampleSudoku);
+    }
+    
+    @AfterEach
+    public void cleanUp() {
+    	try {
+    		Files.deleteIfExists(Paths.get("DaoTestBoard.ser"));
+    	}
+    	catch(Exception e){}
     }
 
     @Test
     void When_DaoUsedToWriteAndReadFromFile_Expect_BoardsAreIdentical() {
 
-        SudokuBoard daoBoard = new SudokuBoard();
-
         try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
-            dao.write(correctBoard);
+            dao.write(writtenBoard);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
-            daoBoard = dao.read();
+            readBoard = dao.read();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        assertTrue(correctBoard.equals(daoBoard));
+        assertTrue(writtenBoard.equals(readBoard));
+
+    }
+    
+    @Test
+    void When_DaoUsedToWriteAndReadFromFile_Expect_ReadBoardToBeFullyFunctional() {
+
+        try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
+            dao.write(writtenBoard);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
+            readBoard = dao.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        readBoard.set(0, 0, 4);
+        assertEquals(readBoard.get(0, 0), 4);
 
     }
 
     private void settingSudokuBoard(final int[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[i].length; j++) {
-                correctBoard.set(i,j,arr[i][j]);
+                writtenBoard.set(i,j,arr[i][j]);
             }
         }
     }
