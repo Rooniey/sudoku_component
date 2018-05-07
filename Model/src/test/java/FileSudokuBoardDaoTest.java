@@ -53,13 +53,13 @@ class FileSudokuBoardDaoTest {
     @Test
     void When_DaoUsedToWriteAndReadFromFile_Expect_BoardsAreIdentical() {
 
-        try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
+        try (FileSudokuBoardDao dao = (FileSudokuBoardDao)SudokuBoardDaoFactory.getFileDao(fileName)){
             dao.write(writtenBoard);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
+        try (FileSudokuBoardDao dao =  (FileSudokuBoardDao)SudokuBoardDaoFactory.getFileDao(fileName)){
             readBoard = dao.read();
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,13 +72,13 @@ class FileSudokuBoardDaoTest {
     @Test
     void When_DaoUsedToWriteAndReadFromFile_Expect_ReadBoardToBeFullyFunctional() {
 
-        try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
+        try (FileSudokuBoardDao dao =  (FileSudokuBoardDao)SudokuBoardDaoFactory.getFileDao(fileName)){
             dao.write(writtenBoard);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try (FileSudokuBoardDao dao = SudokuBoardDaoFactory.getFileDao(fileName)){
+        try (FileSudokuBoardDao dao =  (FileSudokuBoardDao)SudokuBoardDaoFactory.getFileDao(fileName)){
             readBoard = dao.read();
         } catch (Exception e) {
             e.printStackTrace();
