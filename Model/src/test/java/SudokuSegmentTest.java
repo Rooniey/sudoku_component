@@ -3,6 +3,8 @@ import org.junit.jupiter.api.Test;
 import pl.lodz.p.pl.SudokuBoard;
 import pl.lodz.p.pl.SudokuSegment;
 
+import java.lang.reflect.Field;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -101,6 +103,38 @@ public class SudokuSegmentTest {
         assertFalse(sf.hashCode() == sf2.hashCode());
     }
 
+    @Test
+    void When_CloneIsCalled_Expect_ReturnsClonedObjectWithDifferentMemoryAddress(){
+        try{
+            SudokuSegment cloned = (SudokuSegment)sf.clone();
+            assertTrue(sf != cloned);
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void When_CloneIsCalled_Expect_ReturnsClonedObjectEqualToOriginal() {
+        try{
+            SudokuSegment cloned = (SudokuSegment) sf.clone();
+            assertTrue(sf.equals(cloned));
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void When_CloneIsCalled_Expect_ReturnsClonedObjectOfTheSameClassAsOriginal() {
+        try{
+            SudokuSegment cloned = (SudokuSegment) sf.clone();
+            assertTrue(sf.getClass() == cloned.getClass());
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
 
     private void settingSudokuBoard(final int[][] arr) {
         for (int i = 0; i < arr.length; i++) {

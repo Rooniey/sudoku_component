@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SudokuBoard implements Serializable {
+public class SudokuBoard implements Serializable, Cloneable {
 
     public static final int RowLen = 9;    //length of the sudoku board
     public static final int BoxLen = 3;    //length of a side of small boxes (that sudoku is built upon)
@@ -24,6 +24,15 @@ public class SudokuBoard implements Serializable {
         }
     }
 
+    public SudokuBoard(final List<SudokuField> sudokuFields) {
+        //we need to copy values from the list in order to set size and ensure that only SudokuBoard can change the board
+        board = Arrays.asList(new SudokuField[RowLen * RowLen]);
+        for (int i = 0; i < RowLen; i++) {
+            for (int j = 0; j < RowLen; j++) {
+                board.set(i * RowLen + j, sudokuFields.get(i * RowLen + j));
+            }
+        }
+    }
 
 
     public int get(int x, int y) {
@@ -145,6 +154,15 @@ public class SudokuBoard implements Serializable {
         }
 
         return true;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        List<SudokuField> sudokuFields = Arrays.asList(new SudokuField[board.size()]);
+        for (int i = 0; i < board.size(); i++) {
+            sudokuFields.set(i, (SudokuField) board.get(i).clone());
+        }
+        return new SudokuBoard(sudokuFields);
     }
 
     @Override

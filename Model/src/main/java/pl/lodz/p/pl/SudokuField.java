@@ -1,12 +1,11 @@
 package pl.lodz.p.pl;
 
-//import java.util.Objects;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.io.Serializable;
 
-public class SudokuField implements Serializable{
+public class SudokuField implements Serializable, Comparable<SudokuField>, Cloneable {
 
     private int value;
 
@@ -49,5 +48,15 @@ public class SudokuField implements Serializable{
         return MoreObjects.toStringHelper(this)
                 .add("value", value)
                 .toString();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
+    public int compareTo(final SudokuField o) {
+        return Integer.compare(this.getFieldValue(), o.getFieldValue());
     }
 }

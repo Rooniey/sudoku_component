@@ -10,7 +10,7 @@
         <version>2.0-SNAPSHOT</version>
     </parent>
     <artifactId>ViewProject</artifactId>
-    <packaging>jar</packaging>
+
 
 
     <properties>
@@ -29,5 +29,5 @@
         </dependencies>
     </dependencyManagement>
 
-    
+
 </project>

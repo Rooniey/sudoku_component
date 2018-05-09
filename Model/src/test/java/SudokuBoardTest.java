@@ -60,6 +60,41 @@ class SudokuBoardTest {
         assertFalse(sb.checkBoard());
     }
 
+
+    @Test
+    void When_CloneIsCalled_Expect_ReturnsClonedObjectWithDifferentMemoryAddress() {
+        try{
+            SudokuBoard cloned = (SudokuBoard) sb.clone();
+            assertTrue(sb != cloned);
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void When_CloneIsCalled_Expect_ReturnsClonedObjectEqualToOriginal() {
+        try{
+            SudokuBoard cloned = (SudokuBoard) sb.clone();
+            assertTrue(sb.equals(cloned));
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    void When_CloneIsCalled_Expect_ReturnsClonedObjectOfTheSameClassAsOriginal() {
+        try{
+            SudokuBoard cloned = (SudokuBoard) sb.clone();
+            assertTrue(sb.getClass() == cloned.getClass());
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
+
     private void settingSudokuBoard(final int[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[i].length; j++) {

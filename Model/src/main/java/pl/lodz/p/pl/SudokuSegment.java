@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class SudokuSegment {
+public class SudokuSegment implements Cloneable {
 
     private List<SudokuField> fields;
 
@@ -17,6 +17,15 @@ public class SudokuSegment {
         for (int i = 0; i < fields.size(); i++) {
             this.fields.set(i, fields.get(i));
         }
+    }
+
+    public List<SudokuField> getSegment() {
+        List<SudokuField> toReturn = Arrays.asList(new SudokuField[fields.size()]);
+
+        for (int i = 0; i < fields.size(); i++) {
+            toReturn.set(i, new SudokuField(fields.get(i).getFieldValue()));
+        }
+        return toReturn;
     }
 
     public boolean verify() {
@@ -60,5 +69,14 @@ public class SudokuSegment {
         return MoreObjects.toStringHelper(this)
                 .add("fields", fields)
                 .toString();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        List<SudokuField> copyOfFields = Arrays.asList(new SudokuField[fields.size()]);
+        for (int i = 0; i < fields.size(); i++) {
+            copyOfFields.set(i, (SudokuField) fields.get(i).clone());
+        }
+        return new SudokuSegment(copyOfFields);
     }
 }
