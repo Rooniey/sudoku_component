@@ -6,12 +6,21 @@ import com.google.common.base.Objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class SudokuBoard implements Serializable, Cloneable {
 
     public static final int RowLen = 9;    //length of the sudoku board
     public static final int BoxLen = 3;    //length of a side of small boxes (that sudoku is built upon)
+
+    public enum Difficulties {
+        Easy,
+        Medium,
+        Hard
+    };
 
     private List<SudokuField> board;
 
@@ -180,5 +189,33 @@ public class SudokuBoard implements Serializable, Cloneable {
     @Override
     public int hashCode() {
         return Objects.hashCode(board);
+    }
+
+    public void setDifficulty(Difficulties difficulty) {
+        int fieldsToRemoveCount = 0;
+
+        switch(difficulty) {
+            case Easy:
+                fieldsToRemoveCount = 10;
+                break;
+            case Medium:
+                fieldsToRemoveCount = 25;
+                break;
+            case Hard:
+                fieldsToRemoveCount = 40;
+                break;
+        }
+
+        //populate the list with ints ranging from 1 to board size
+        List<Integer> possibilities = IntStream.rangeClosed(1, board.size() - 1).boxed().collect(Collectors.toList());
+
+        Collections.shuffle(possibilities);
+
+        //get wanted number of random indexes
+        List<Integer> removeIndexes  = possibilities.subList(0, fieldsToRemoveCount);
+
+        for(int index : removeIndexes) {
+            board.get(index).setFieldValue(0);
+        }
     }
 }

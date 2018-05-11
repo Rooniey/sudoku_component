@@ -1,7 +1,11 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.lodz.p.pl.BacktrackingSudokuSolver;
 import pl.lodz.p.pl.SudokuBoard;
+import pl.lodz.p.pl.SudokuField;
+import pl.lodz.p.pl.SudokuSolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -101,6 +105,57 @@ class SudokuBoardTest {
                 sb.set(i,j,arr[i][j]);
             }
         }
+    }
+
+    @Test
+    void When_SetDifficultyIsCalledWithEasyDifficulty_Expect_RightAmountOfZeros() {
+        SudokuSolver sudokuSolver = new BacktrackingSudokuSolver();
+        sudokuSolver.solve(sb);
+        sb.setDifficulty(SudokuBoard.Difficulties.Easy);
+
+        int zeros = 0;
+
+        for(SudokuField field : sb.getBoard()) {
+            if(field.getFieldValue() == 0) {
+                zeros++;
+            }
+        }
+
+        assertEquals(10, zeros);
+    }
+
+    @Test
+    void When_SetDifficultyIsCalledWithMediumDifficulty_Expect_RightAmountOfZeros() {
+        SudokuSolver sudokuSolver = new BacktrackingSudokuSolver();
+        sudokuSolver.solve(sb);
+        sb.setDifficulty(SudokuBoard.Difficulties.Medium);
+
+        int zeros = 0;
+
+        for(SudokuField field : sb.getBoard()) {
+            if(field.getFieldValue() == 0) {
+                zeros++;
+            }
+        }
+
+        assertEquals(25, zeros);
+    }
+
+    @Test
+    void When_SetDifficultyIsCalledWithHardDifficulty_Expect_RightAmountOfZeros() {
+        SudokuSolver sudokuSolver = new BacktrackingSudokuSolver();
+        sudokuSolver.solve(sb);
+        sb.setDifficulty(SudokuBoard.Difficulties.Hard);
+
+        int zeros = 0;
+
+        for(SudokuField field : sb.getBoard()) {
+            if(field.getFieldValue() == 0) {
+                zeros++;
+            }
+        }
+
+        assertEquals(40, zeros);
     }
 
 
