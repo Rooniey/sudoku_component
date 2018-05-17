@@ -191,7 +191,7 @@ public class SudokuBoard implements Serializable, Cloneable {
         return Objects.hashCode(board);
     }
 
-    public void setDifficulty(Difficulties difficulty) {
+    public void setDifficulty(final Difficulties difficulty) {
         int fieldsToRemoveCount = 0;
 
         switch(difficulty) {
@@ -214,7 +214,7 @@ public class SudokuBoard implements Serializable, Cloneable {
         //get wanted number of random indexes
         List<Integer> removeIndexes  = possibilities.subList(0, fieldsToRemoveCount);
 
-        for(int index : removeIndexes) {
+        for (int index : removeIndexes) {
             board.get(index).setFieldValue(0);
         }
     }
