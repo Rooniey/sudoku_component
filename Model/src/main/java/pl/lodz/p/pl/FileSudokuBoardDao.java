@@ -38,7 +38,6 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
         if (oIn != null) {
             oIn.close();
         }
-
     }
 
     @Override

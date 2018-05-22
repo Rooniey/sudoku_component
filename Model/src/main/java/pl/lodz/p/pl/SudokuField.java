@@ -2,28 +2,37 @@ package pl.lodz.p.pl;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class SudokuField implements Serializable, Comparable<SudokuField>, Cloneable {
 
-    private int value;
+    transient private IntegerProperty fieldValue;
 
 
-    public SudokuField(int value) {
-        this.value = value;
+    public SudokuField(int fieldValue) {
+        this.fieldValue = new SimpleIntegerProperty(fieldValue);
     }
 
     public SudokuField() {
-        this.value = 0;
+        fieldValue = new SimpleIntegerProperty(0);
     }
 
     public int getFieldValue() {
-        return value;
+        return fieldValue.get();
     }
 
-    public void setFieldValue(int value) {
-        this.value = value;
+    public IntegerProperty fieldValueProperty() {
+        return fieldValue;
+    }
+
+    public void setFieldValue(int fieldValue) {
+        this.fieldValue.set(fieldValue);
     }
 
     @Override
@@ -35,18 +44,18 @@ public class SudokuField implements Serializable, Comparable<SudokuField>, Clone
             return false;
         }
         SudokuField that = (SudokuField) o;
-        return Objects.equal(this.value, that.value);
+        return Objects.equal(this.fieldValue.get(), that.fieldValue.get());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.value);
+        return Objects.hashCode(this.fieldValue.get());
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("value", value)
+                .add("fieldValue", fieldValue)
                 .toString();
     }
 
@@ -58,5 +67,17 @@ public class SudokuField implements Serializable, Comparable<SudokuField>, Clone
     @Override
     public int compareTo(final SudokuField o) {
         return Integer.compare(this.getFieldValue(), o.getFieldValue());
+    }
+
+
+    //customized serialization
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(fieldValue.get());
+    }
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        int x = in.readInt();
+        fieldValue = new SimpleIntegerProperty(x);
     }
 }

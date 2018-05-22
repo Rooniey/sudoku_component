@@ -42,8 +42,6 @@ public class SelectNumberBox {
         sourceButton = button;
     }
 
-
-
     public void getSelectedNumber(Button button) {
        button.setText(selectedNumber);
     }

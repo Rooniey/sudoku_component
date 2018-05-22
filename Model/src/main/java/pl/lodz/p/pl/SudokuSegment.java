@@ -39,8 +39,17 @@ public class SudokuSegment implements Cloneable {
             possibilities.remove(Integer.valueOf(fields.get(i).getFieldValue()));
         }
 
+        int zerosCount = 0;
+        for(SudokuField field : fields) {
+            if(field.getFieldValue() == 0) {
+                zerosCount++;
+            }
+        }
+
         //if the list isn't empty, then there were duplicates
-        if (!possibilities.isEmpty()) {
+        //also, if the number of zeros in the segment is equal to the amount of leftover possibilities,
+        //the segment is not invalid, so the method will go on to return true
+        if (!possibilities.isEmpty() && zerosCount != possibilities.size()) {
             return false;
         }
 
